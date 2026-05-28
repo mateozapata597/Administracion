@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>S&H - Inventario y Proveedores</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .section-box { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; color: #333; }
+        .form-container { display: flex; gap: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body onload="cargarTodo()">
+    <div class="sidebar">
+        <img src="logo.png" class="logo-top" alt="Logo S&H">
+        <nav>
+            <ul>
+                <li><a href="index.html">Roles</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="personal.html">Personal y seguridad social</a></li>
+                <li><a href="contabilidad_y_reportes.html">Contabilidad y reportes</a></li>
+                <li><a href="inventario.html" style="background:#c04543; color:white;">Inventario</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="content">
+        <h1>INVENTARIO Y PROVEEDORES</h1>
+
+        <div class="section-box">
+            <h2>Inventario</h2>
+            <div class="form-container">
+                <input type="text" id="prod" placeholder="Producto">
+                <input type="number" id="cant" placeholder="Cantidad">
+                <input type="number" id="precio" placeholder="Precio">
+                <button onclick="agregarInventario()" class="btn-action">Agregar Producto</button>
+            </div>
+            <table class="table-roles">
+                <thead><tr><th>Id</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Acción</th></tr></thead>
+                <tbody id="tabla-inventario"></tbody>
+            </table>
+        </div>
+
+        <div class="section-box">
+            <h2>Proveedores y Compra</h2>
+            <div class="form-container">
+                <input type="text" id="prov" placeholder="Nombre Proveedor">
+                <input type="email" id="email" placeholder="Correo">
+                <input type="text" id="valor" placeholder="Valor Compra">
+                <button onclick="agregarProveedor()" class="btn-action">Registrar</button>
+            </div>
+            <table class="table-roles">
+                <thead><tr><th>Id</th><th>Nombre</th><th>Correo</th><th>Valor</th><th>Acción</th></tr></thead>
+                <tbody id="tabla-proveedores"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        function cargarTodo() {
+            let inv = JSON.parse(localStorage.getItem('inventario') || "[]");
+            inv.forEach((i, idx) => crearFila(i, idx + 1, 'tabla-inventario'));
+            let prov = JSON.parse(localStorage.getItem('proveedores') || "[]");
+            prov.forEach((p, idx) => crearFila(p, idx + 1, 'tabla-proveedores'));
+        }
+
+        function crearFila(data, id, tablaId) {
+            let fila = document.getElementById(tablaId).insertRow();
+            // Creamos celdas con datos (asumimos que el objeto tiene 3 propiedades)
+            let props = Object.values(data);
+            fila.innerHTML = `<td>${id}</td>
+                <td>${props[0]}</td><td>${props[1]}</td><td>${props[2]}</td>
+                <td><button class="btn-action" onclick="editarFila(this)">Modificar</button></td>`;
+        }
+
+        function editarFila(btn) {
+            let fila = btn.parentNode.parentNode;
+            let celdas = fila.getElementsByTagName("td");
+            
+            if (btn.innerText === "Modificar") {
+                for (let i = 1; i < 4; i++) {
+                    celdas[i].innerHTML = `<input type="text" value="${celdas[i].innerText}" style="width:80%">`;
+                }
+                btn.innerText = "Guardar";
+            } else {
+                for (let i = 1; i < 4; i++) {
+                    celdas[i].innerText = celdas[i].getElementsByTagName("input")[0].value;
+                }
+                btn.innerText = "Modificar";
+            }
+        }
+
+        // Funciones de agregar simplificadas
+        function agregarInventario() {
+            let i = { p: document.getElementById('prod').value, c: document.getElementById('cant').value, pr: document.getElementById('precio').value };
+            let lista = JSON.parse(localStorage.getItem('inventario') || "[]");
+            lista.push(i);
+            localStorage.setItem('inventario', JSON.stringify(lista));
+            location.reload(); // Recarga para refrescar IDs
+        }
+
+        function agregarProveedor() {
+            let p = { n: document.getElementById('prov').value, e: document.getElementById('email').value, v: document.getElementById('valor').value };
+            let lista = JSON.parse(localStorage.getItem('proveedores') || "[]");
+            lista.push(p);
+            localStorage.setItem('proveedores', JSON.stringify(lista));
+            location.reload();
+        }
+    </script>
+</body>
+</html>

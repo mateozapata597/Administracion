@@ -1,0 +1,33 @@
+body { margin: 0; font-family: sans-serif; display: flex; background-color: #fcf8f7; }
+
+.sidebar { width: 220px; background-color: #f7e6e5; height: 100vh; padding: 20px; }
+.logo-top { width: 100%; margin-bottom: 20px; border-radius: 8px; }
+
+.sidebar nav ul { list-style: none; padding: 0; }
+.sidebar nav ul li a { 
+    display: block; padding: 12px; margin-bottom: 10px; 
+    background: white; color: #c04543; text-decoration: none; 
+    border-radius: 8px; font-weight: bold; border: 1px solid #c04543; 
+}
+.sidebar nav ul li a:hover { background: #c04543; color: white; }
+
+.content { flex: 1; padding: 40px; background-color: #c04543; color: white; min-height: 100vh; }
+.main-img { display: block; margin: 0 auto 20px; max-width: 250px; }
+
+.welcome-text { 
+    text-align: center; 
+    margin-bottom: 30px; 
+}
+
+/* CENTRAMOS EL TÍTULO */
+h1 { 
+    text-align: center; 
+    color: white; 
+    margin-bottom: 30px; 
+}
+
+.form-container { background: white; padding: 20px; border-radius: 8px; color: #333; margin-bottom: 20px; }
+.table-roles { width: 100%; border-collapse: collapse; background-color: white; color: #333; border-radius: 8px; overflow: hidden; }
+.table-roles th, .table-roles td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+.table-roles th { background-color: #fdfaf9; }
+.btn-action { background-color: #c04543; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }

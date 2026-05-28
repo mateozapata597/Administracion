@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>S&H - Contabilidad y Reportes</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Contenedor principal de las 4 tarjetas */
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            max-width: 800px; 
+            margin: 40px auto; 
+        }
+        .card-menu { 
+            background: white; 
+            padding: 40px 20px; 
+            text-align: center; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            color: #333; 
+            cursor: pointer; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            transition: 0.3s; 
+            font-size: 16px;
+        }
+        .card-menu:hover { transform: scale(1.02); background: #fdfaf9; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="logo.png" class="logo-top" alt="Logo S&H">
+        <nav>
+            <ul>
+                <li><a href="index.html">Roles</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="personal.html">Personal y seguridad social</a></li>
+                <li><a href="contabilidad_y_reportes.html" style="background:#c04543; color:white;">Contabilidad y reportes</a></li>
+                <li><a href="inventario.html">Inventario</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="content">
+        <h1 style="color: white; text-align: center; margin-top: 30px;">CONTABILIDAD Y REPORTES</h1>
+        
+        <div class="grid-container">
+            <div class="card-menu" onclick="alert('Funcionalidad: Generar Factura')">GENERAR FACTURA</div>
+            <div class="card-menu" onclick="alert('Funcionalidad: Reporte Contable')">GENERAR REPORTE CONTABLE</div>
+            <div class="card-menu" onclick="alert('Funcionalidad: Comprobante Nómina')">COMPROBANTE NÓMINA</div>
+            <div class="card-menu" onclick="alert('Funcionalidad: Clientes')">CLIENTES</div>
+        </div>
+    </main>
+</body>
+</html>

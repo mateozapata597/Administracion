@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>S&H - Personal y Seguridad Social</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .file-input { background: white; padding: 5px; border-radius: 4px; margin-right: 10px; }
+        .editable input { width: 90%; }
+    </style>
+</head>
+<body onload="cargarPersonal()">
+    <div class="sidebar">
+        <img src="logo.png" class="logo-top" alt="Logo S&H">
+        <nav>
+            <ul>
+                <li><a href="index.html">Roles</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="personal.html" style="background:#c04543; color:white;">Personal y seguridad social</a></li>
+                <li><a href="contabilidad_y_reportes.html">Contabilidad y reportes</a></li>
+                <li><a href="inventario.html">Inventario</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="content">
+        <h1>PERSONAL Y SEGURIDAD SOCIAL</h1>
+
+        <div class="form-container">
+            <input type="text" id="nombreE" placeholder="Nombre Empleado">
+            <input type="text" id="seguridad" placeholder="Seguridad Social">
+            <input type="text" id="activa" placeholder="Activa (Si/No)">
+            <label style="color: #333; font-size: 14px; margin-left:10px;">PDF:</label>
+            <input type="file" id="pdfArchivo" class="file-input" accept="application/pdf">
+            <button onclick="agregarPersonal()" class="btn-action">Agregar Empleado</button>
+        </div>
+
+        <table class="table-roles">
+            <thead>
+                <tr>
+                    <th>Nombre</th><th>Seguridad Social</th><th>Activa</th><th>Documento</th><th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-personal"></tbody>
+        </table>
+    </main>
+
+    <script>
+        function cargarPersonal() {
+            let empleados = JSON.parse(localStorage.getItem('empleados') || "[]");
+            let tabla = document.getElementById('tabla-personal');
+            tabla.innerHTML = "";
+            empleados.forEach((emp, index) => crearFila(emp, index));
+        }
+
+        function agregarPersonal() {
+            let fileInput = document.getElementById('pdfArchivo');
+            if (fileInput.files.length === 0) {
+                alert("Por favor selecciona un archivo PDF");
+                return;
+            }
+
+            let reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = function () {
+                let emp = {
+                    nombre: document.getElementById('nombreE').value,
+                    seguridad: document.getElementById('seguridad').value,
+                    activa: document.getElementById('activa').value,
+                    pdfData: reader.result, // Contenido del archivo
+                    nombreArchivo: fileInput.files[0].name // Nombre del archivo
+                };
+
+                let lista = JSON.parse(localStorage.getItem('empleados') || "[]");
+                lista.push(emp);
+                localStorage.setItem('empleados', JSON.stringify(lista));
+                location.reload();
+            };
+        }
+
+        function crearFila(emp, index) {
+            let tabla = document.getElementById('tabla-personal');
+            let fila = tabla.insertRow();
+            let pdfLink = `<a href="${emp.pdfData}" download="${emp.nombreArchivo}" style="color:blue; text-decoration:underline;">PDF</a>`;
+            
+            fila.innerHTML = `
+                <td class="editable">${emp.nombre}</td>
+                <td class="editable">${emp.seguridad}</td>
+                <td class="editable">${emp.activa}</td>
+                <td>${pdfLink}</td>
+                <td><button class="btn-action" onclick="editarFila(this, ${index})">Actualizar</button></td>
+            `;
+        }
+
+        function editarFila(btn, index) {
+            let fila = btn.parentNode.parentNode;
+            let celdas = fila.querySelectorAll(".editable");
+
+            if (btn.innerText === "Actualizar") {
+                celdas.forEach(td => td.innerHTML = `<input type="text" value="${td.innerText}">`);
+                btn.innerText = "Guardar";
+            } else {
+                let empleados = JSON.parse(localStorage.getItem('empleados') || "[]");
+                empleados[index].nombre = celdas[0].querySelector("input").value;
+                empleados[index].seguridad = celdas[1].querySelector("input").value;
+                empleados[index].activa = celdas[2].querySelector("input").value;
+                
+                localStorage.setItem('empleados', JSON.stringify(empleados));
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

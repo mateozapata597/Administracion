@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>S&H - Gestión de Roles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="cargarUsuarios()">
+    <div class="sidebar">
+        <img src="logo.png" class="logo-top" alt="Logo S&H">
+        <nav>
+            <ul>
+                <li><a href="index.html">Roles</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="personal.html">Personal y seguridad social</a></li>
+                <li><a href="contabilidad_y_reportes.html">Contabilidad y reportes</a></li>
+                <li><a href="inventario.html">Inventario</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main class="content">
+        <div class="welcome-text">
+            <p>¡Bienvenido/a al Sistema Administrativo de S&H!<br>
+            Esperamos que esta plataforma facilite la gestión de tus proyectos.</p>
+        </div>
+        <img src="Adm.png" class="main-img" alt="Ilustración">
+        
+        <h1>GESTION DE ROLES</h1>
+
+        <div class="form-container">
+            <input type="text" id="nombre" placeholder="Nombre">
+            <input type="text" id="correo" placeholder="Correo">
+            <input type="text" id="rol" placeholder="Rol">
+            <button onclick="agregarUsuario()" class="btn-action">Agregar Usuario</button>
+        </div>
+
+        <table class="table-roles">
+            <thead>
+                <tr>
+                    <th>Usuario</th><th>Correo</th><th>Rol</th><th>Estado</th><th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-body"></tbody>
+        </table>
+    </main>
+
+    <script>
+        function cargarUsuarios() {
+            let usuarios = JSON.parse(localStorage.getItem('usuarios') || "[]");
+            usuarios.forEach(u => crearFilaUsuario(u));
+        }
+
+        function agregarUsuario() {
+            let u = {
+                nombre: document.getElementById('nombre').value,
+                correo: document.getElementById('correo').value,
+                rol: document.getElementById('rol').value
+            };
+
+            if(u.nombre === "") return;
+
+            // Guardar en localStorage
+            let usuarios = JSON.parse(localStorage.getItem('usuarios') || "[]");
+            usuarios.push(u);
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+            crearFilaUsuario(u);
+            limpiarInputs();
+        }
+
+        function crearFilaUsuario(u) {
+            let tabla = document.getElementById('tabla-body');
+            let fila = tabla.insertRow();
+            fila.innerHTML = `
+                <td>${u.nombre}</td><td>${u.correo}</td><td>${u.rol}</td><td>Activo</td>
+                <td><button class="btn-action" onclick="editarFila(this)">Actualizar</button></td>
+            `;
+        }
+
+        function limpiarInputs() {
+            document.getElementById('nombre').value = '';
+            document.getElementById('correo').value = '';
+            document.getElementById('rol').value = '';
+        }
+
+        function editarFila(btn) {
+            let celdas = btn.parentNode.parentNode.getElementsByTagName("td");
+            if (btn.innerText === "Actualizar") {
+                for (let i = 0; i < 3; i++) {
+                    celdas[i].innerHTML = `<input type="text" value="${celdas[i].innerText}" style="width:80%">`;
+                }
+                btn.innerText = "Guardar";
+            } else {
+                for (let i = 0; i < 3; i++) {
+                    celdas[i].innerText = celdas[i].getElementsByTagName("input")[0].value;
+                }
+                btn.innerText = "Actualizar";
+            }
+        }
+    </script>
+</body>
+</html>
